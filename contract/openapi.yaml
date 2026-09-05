@@ -1,0 +1,64 @@
+openapi: 3.1.0
+info:
+  title: 问财对话服务契约
+  version: 1.0.0
+paths:
+  /api/v1/wencai/chat:
+    post:
+      summary: 处理日常问答或个股研判
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WencaiRequest"
+      responses:
+        "200":
+          description: 问财回复
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WencaiResponse"
+components:
+  schemas:
+    WencaiRequest:
+      type: object
+      required: [conversationId, prompt, intent]
+      properties:
+        conversationId: { type: string }
+        symbol: { type: string }
+        prompt: { type: string }
+        intent:
+          type: string
+          enum: [auto, greeting, help, general, data_gap, event, signal, selection, market, sector, holding, trade_plan, indicator, forecast, analysis]
+        history:
+          type: array
+          items:
+            type: object
+            required: [role, content]
+            properties:
+              role: { type: string, enum: [user, assistant] }
+              content: { type: string }
+        context:
+          type: object
+          properties:
+            asOf: { type: string, example: "11:30" }
+            stock: { type: object, additionalProperties: true }
+            timeline: { type: array, items: { type: object, additionalProperties: true } }
+            indicators: { type: object, additionalProperties: true }
+            indices: { type: array, items: { type: object, additionalProperties: true } }
+            sectors: { type: array, items: { type: object, additionalProperties: true } }
+    WencaiResponse:
+      type: object
+      required: [code, data]
+      properties:
+        code: { type: integer, example: 0 }
+        message: { type: string }
+        data:
+          type: object
+          required: [source, intent, text]
+          properties:
+            source: { type: string, enum: [deepseek, mock] }
+            intent: { type: string }
+            text: { type: string }
+            requestId: { type: string }

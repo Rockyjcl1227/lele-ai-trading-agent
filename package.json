@@ -1,0 +1,16 @@
+{
+  "name": "lele-ai-trading-agent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "乐乐的 AI Trading Agent：移动端行情分析与 AI 交易研判应用",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0"
+  }
+}
